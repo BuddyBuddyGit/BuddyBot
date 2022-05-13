@@ -1,0 +1,52 @@
+1. RaspberryPi 4에 Ubuntu20.04 Server LTS 설치하기
+   1) RaspberryPi Imager 다운로드
+      https://www.raspberrypi.com/software/
+      위의 사이트에 들어가서 Imager를 다운한다.
+   2) Micro SD Card에 'Ubuntu 20.04 Server LTS' 파일을 Imager를 이용하여 설치한다.
+   3) 설치 완료 후 PC에 다시 Micro SD Card를 넣는다.
+   4) WiFi 환경 설정을 위하여 "network-config" 파일을 아래와 같은 형식으로 수정한다. 
+      wifis:
+          wlan0:
+            dhcp4: true
+            optional: true
+            access-points:
+                "wifi name":   
+                password: "123456789"
+     * 학교 WiFi의 경우, 아래 처럼 입력하면 된다.
+        "wifi name":
+            auth:
+                key-management: eap
+                method: peap
+                identity: "id"
+                password: "password"
+     * WiFi가 여러 개일 경우 각 WiFi password 아래에 priority를 넣어준다. 
+       access-points:
+                "wifi name":   
+                password: "123456789"
+                priority: "100"
+       prioity는 아무 숫자나 넣어도 가능하며, 높을 수록 우선 순위를 가진다. 
+     5) 모니터 사용을 위해 "config.txt" 파일에 아래 코드를 맨 아래 넣어준다.
+        max_usb_current=1
+        hdmi_group=2
+        hdmi_mode=87
+        hdmi_cvt 800 480 60 6 0 0 0
+        hdmi_drive=1
+     6) 안전하게 Micro SD Card를 제거한다. 
+     
+2. RaspberryPi 4 부팅하기
+   1) Micro SD Card를 넣은 후 전원을 연결한다. 
+   2) RaspberryPi의 IP를 확인한 후 PC의 cmd 창에 아래의 명령어를 이용하여 ssh 연결을 시도한다.
+      ssh ubuntu@{RaspberryPi's IP}
+   3) 접속 후 아래 명령어를 실행한다.
+      sudo apt update 
+      sudo apt upgrade
+      
+      sudo apt-get install ntpdate
+      sudo ntpdate ntp.ubuntu.com
+      
+      sudo apt install ubuntu-desktop
+      git clone https://github.com/goodtft/LCD-show.git
+      cd LCD-show/
+      chmod +x LCD5-show
+      sudo ./LCD5-show
+   이렇게 하면 모니터로도 사용가능하고, ssh로도 사용가능하다. 
